@@ -6,6 +6,9 @@
  * main.c
  */
 #include <stdint.h>
+#include <assert.h>
+
+#define DEBUG
 
 #define GPIO_PORTF_DATA_BITS_R  ((volatile unsigned long *)0x40025000)
 #define GPIO_PORTF_DATA_R       (*((volatile unsigned long *)0x400253FC))
@@ -28,9 +31,12 @@ int main(void)
     uint32_t local_u32variable = 0x12345678;
     uint16_t local_u16variable = 0xABCD;
 
-    *((unsigned int *)0x400FE608U) = 0x20U;
+    // without this, you will see fault
+    // *((unsigned int *)0x400FE608U) = 0x20U;
     *((unsigned int *)0x40025400U) = 0xEU;
     *((unsigned int *)0x4002551CU) = 0xEU;
+
+    //assert(0); // test assert
 
     while(1) {
 //        *((unsigned int *)0x400253FCU) = 0x2U;
