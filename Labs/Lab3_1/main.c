@@ -38,10 +38,9 @@ int main(void)
     // init GPIO F
     SYSCTL_RCGCGPIO_R = 0x20;
 
-    // following four lines are added here for switches
+    // following a few lines are added here for switch interface
     GPIO_PORTF_LOCK_R = GPIO_UNLOCK_VALUE; // without this switches are not working.
     GPIO_PORTF_CR_R |= (SW1 | SW2);
-    GPIO_PORTF_AFSEL_R = 0;
     GPIO_PORTF_PUR_R |= (SW1 | SW2);
 
     GPIO_PORTF_AMSEL_R = 0;
