@@ -36,15 +36,6 @@ static void IntDefaultHandler(void);
 
 //*****************************************************************************
 //
-// Forward declaration of the interrupt handlers.
-//
-//*****************************************************************************
-extern void gpio_portf_handler(void);
-extern void gpio_porta_handler(void);
-extern void systick_handler(void);
-
-//*****************************************************************************
-//
 // External declaration for the reset handler that is to be called when the
 // processor is started
 //
@@ -64,6 +55,9 @@ extern uint32_t __STACK_TOP;
 //
 //*****************************************************************************
 // To be added by user
+extern void gpio_portf_handler(void);
+extern void gpio_porta_handler(void);
+extern void systick_handler(void);
 
 //*****************************************************************************
 //
