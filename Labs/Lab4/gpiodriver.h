@@ -69,6 +69,19 @@ typedef enum {
 
 #define GPIO_PORTA_BITS     0xFF    // 8 bits
 
+//*****************************************************************************
+//
+// On external LEDs and switches
+//
+//*****************************************************************************
+typedef enum {
+    EXT_LED_RED = 0, // this value must be fixed
+} EXT_LED;
+
+typedef enum {
+    EXT_SW1 = 0, // this value must be fixed
+    EXT_SW2 = 0  // this value must be fixed
+} EXT_SW;
 
 //*****************************************************************************
 //
@@ -104,10 +117,19 @@ void turn_off_onboard_led(ONBOARD_LED led);
 void turn_on_onboard_led_and_delay(ONBOARD_LED led, uint32_t delay);
 void turn_off_onboard_led_and_delay(ONBOARD_LED led, uint32_t delay);
 
+void init_gpio_porta(void);
+bool read_ext_sw1(void);
+bool read_ext_sw2(void);
+void turn_on_ext_led(EXT_LED led);
+void turn_off_ext_led(EXT_LED led);
+void turn_on_ext_led_and_delay(EXT_LED led, uint32_t delay);
+void turn_off_ext_led_and_delay(EXT_LED led, uint32_t delay);
+
 void init_systick(void);
 void systick_disable_delay(void);
 void systick_enable_delay(void);
 void systick_delay(uint32_t ms);
 void init_gpio_portf_interrupt(void);
+void init_gpio_porta_interrupt(void);
 
 #endif /* GPIODRIVER_H_ */

@@ -23,6 +23,7 @@
 
 void sos_s_signal(void);
 void sos_o_signal(void);
-void sos_signal(void);
+void sos_on(void);
+void sos_off(void);
 
 #endif /* SOS_H_ */

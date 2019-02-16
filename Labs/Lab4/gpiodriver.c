@@ -129,6 +129,50 @@ void turn_off_onboard_led_and_delay(ONBOARD_LED led, uint32_t delay)
     systick_delay(delay);
 }
 
+//*****************************************************************************
+//
+// GPIO registers (PORTA)
+//
+//*****************************************************************************
+
+void init_gpio_porta(void)
+{
+    // TODO:
+}
+
+bool read_ext_sw1(void)
+{
+    // TODO:
+    return false;
+}
+
+bool read_ext_sw2(void)
+{
+    // TODO:
+    return false;
+}
+
+void turn_on_ext_led(EXT_LED led)
+{
+    // TODO:
+}
+
+void turn_off_ext_led(EXT_LED led)
+{
+    // TODO:
+}
+
+void turn_on_ext_led_and_delay(EXT_LED led, uint32_t delay)
+{
+    turn_on_ext_led(led);
+    systick_delay(delay);
+}
+
+void turn_off_ext_led_and_delay(EXT_LED led, uint32_t delay)
+{
+    turn_off_ext_led(led);
+    systick_delay(delay);
+}
 
 //*****************************************************************************
 //
@@ -198,6 +242,11 @@ void init_gpio_portf_interrupt(void)
     NVIC_EN0_R = NVIC_EN0_PORTF;      // (h) enable interrupt 30 in NVIC
 
     enable_interrupt();
+}
+
+void init_gpio_porta_interrupt(void)
+{
+    // TODO:
 }
 
 //*****************************************************************************

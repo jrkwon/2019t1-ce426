@@ -10,8 +10,10 @@
 
 extern bool onboard_sw1_pressed;
 extern bool onboard_sw2_pressed;
+extern bool ext_sw1_pressed;
+extern bool ext_sw2_pressed;
 
 void gpio_portf_handler(void);
-void reset_sw_pressed(void);
+void gpio_porta_handler(void);
 
 #endif /* INT_HANDLERS_H_ */
