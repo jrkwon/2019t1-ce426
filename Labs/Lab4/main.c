@@ -45,8 +45,13 @@ void super_loop(void)
 int main(void)
 {
     init_systick();
+#ifdef USE_EXT_CIRCUIT
+    init_gpio_porta();
+    init_gpio_porta_interrupt();
+#else
     init_gpio_portf();
     init_gpio_portf_interrupt();
+#endif
 
     super_loop();
     return 0;
