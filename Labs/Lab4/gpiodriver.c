@@ -206,9 +206,9 @@ void init_systick(void)
 static uint32_t get_tick_ctl(void)
 {
     uint32_t tick_ctl;
-    __asm("    cpsid    i\n"); // disable irq
+    asm("    cpsid    i\n"); // disable irq
     tick_ctl = g_tick_ctl;
-    __asm("    cpsie    i\n"); // enable irq
+    asm("    cpsie    i\n"); // enable irq
     return tick_ctl;
 }
 
