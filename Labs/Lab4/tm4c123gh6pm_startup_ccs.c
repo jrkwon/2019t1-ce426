@@ -40,6 +40,7 @@ static void IntDefaultHandler(void);
 //
 //*****************************************************************************
 extern void gpio_portf_handler(void);
+extern void gpio_porta_handler(void);
 extern void systick_handler(void);
 
 //*****************************************************************************
