@@ -8,13 +8,6 @@
 
 //*****************************************************************************
 //
-// global variables
-//
-//*****************************************************************************
-bool g_immediate_stop = false;
-
-//*****************************************************************************
-//
 // The prototypes of local functions
 //
 //*****************************************************************************
@@ -26,8 +19,9 @@ static uint32_t get_tick_ctl(void);
 //
 //*****************************************************************************
 static volatile uint32_t g_tick_ctl;
-
-
+// to stop systick_wait immediately.
+// systick_delay() will have a proper delay only if this value is false.
+static bool immediate_stop = false;
 
 //*****************************************************************************
 //
@@ -174,10 +168,21 @@ static uint32_t get_tick_ctl(void)
     return tick_ctl;
 }
 
+void systick_disable_delay(void)
+{
+    immediate_stop = true;
+}
+
+// systick is enabled by default after systick_init
+void systick_enable_delay(void)
+{
+    immediate_stop = false;
+}
+
 void systick_delay(uint32_t ms)
 {
     uint32_t start = get_tick_ctl();
-    while(((get_tick_ctl() - start) < ms) && !g_immediate_stop)
+    while(((get_tick_ctl() - start) < ms) && !immediate_stop)
         ;
 }
 

@@ -105,6 +105,8 @@ void turn_on_onboard_led_and_delay(ONBOARD_LED led, uint32_t delay);
 void turn_off_onboard_led_and_delay(ONBOARD_LED led, uint32_t delay);
 
 void init_systick(void);
+void systick_disable_delay(void);
+void systick_enable_delay(void);
 void systick_delay(uint32_t ms);
 void init_gpio_portf_interrupt(void);
 
