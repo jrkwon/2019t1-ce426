@@ -1,22 +1,27 @@
 #include "gpiodriver.h"
+#include "sos.h"
 
 void super_loop(void)
 {
-    for(;;)
-        ;
-}
+    bool start_sos = false;
 
-void test_cases(void)
-{
+    for(;;) {
+        if(onboard_sw1_pressed)
+            start_sos = true;
+        if(onboard_sw2_pressed)
+            start_sos = false;
 
+        if(start_sos)
+            sos_signal();
+
+    }
 }
 
 int main(void)
 {
+    init_systick();
     init_gpio_portf();
     init_gpio_portf_interrupt();
-
-    test_cases();
 
     super_loop();
     return 0;

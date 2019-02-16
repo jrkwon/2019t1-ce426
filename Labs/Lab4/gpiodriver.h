@@ -11,6 +11,7 @@
 #include "tm4c123gh6pm.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include "int_handlers.h"
 
 //*****************************************************************************
 //
@@ -39,13 +40,17 @@
 // On board LEDs and switches
 //
 //*****************************************************************************
-#define ONBOARD_LED_RED     0x02
-#define ONBOARD_LED_BLUE    0x04
-#define ONBOARD_LED_GREEN   0x08
-#define ONBOARD_LED_ALL     0x0E
+typedef enum {
+    ONBOARD_LED_RED = 0x02,
+    ONBOARD_LED_BLUE = 0x04,
+    ONBOARD_LED_GREEN = 0x08,
+    ONBOARD_LED_ALL = 0x0E
+} ONBOARD_LED;
 
-#define ONBOARD_SW1         0x10
-#define ONBOARD_SW2         0x01
+typedef enum {
+    ONBOARD_SW1 = 0x10,
+    ONBOARD_SW2 = 0x01
+} ONBOARD_SW;
 
 //*****************************************************************************
 //
@@ -75,6 +80,17 @@
 #define NVIC_EN0_PORTA      0x00000001;      // bit 30 in NVIC_EN0
 #define NVIC_EN0_PORTF      0x40000000;      // bit 30 in NVIC_EN0
 
+// SysTick
+#define SYS_CLOCK_HZ        16000000U /* 16 MHz */
+
+
+//*****************************************************************************
+//
+// global variables
+//
+//*****************************************************************************
+extern bool g_immediate_stop;
+
 //*****************************************************************************
 //
 // Function prototypes
@@ -83,9 +99,13 @@
 void init_gpio_portf(void);
 bool read_onboard_sw1(void);
 bool read_onboard_sw2(void);
-void turn_on_onboard_led(int led);
-void turn_off_onboard_led(int led);
+void turn_on_onboard_led(ONBOARD_LED led);
+void turn_off_onboard_led(ONBOARD_LED led);
+void turn_on_onboard_led_and_delay(ONBOARD_LED led, uint32_t delay);
+void turn_off_onboard_led_and_delay(ONBOARD_LED led, uint32_t delay);
 
+void init_systick(void);
+void systick_delay(uint32_t ms);
 void init_gpio_portf_interrupt(void);
 
 #endif /* GPIODRIVER_H_ */

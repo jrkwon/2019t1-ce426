@@ -8,6 +8,29 @@
 
 //*****************************************************************************
 //
+// global variables
+//
+//*****************************************************************************
+bool g_immediate_stop = false;
+
+//*****************************************************************************
+//
+// The prototypes of local functions
+//
+//*****************************************************************************
+static uint32_t get_tick_ctl(void);
+
+//*****************************************************************************
+//
+// local variables
+//
+//*****************************************************************************
+static volatile uint32_t g_tick_ctl;
+
+
+
+//*****************************************************************************
+//
 // GPIO registers (PORTF)
 //
 //*****************************************************************************
@@ -60,7 +83,7 @@ bool read_onboard_sw2(void)
     return (GPIO_PF0 == 0) ? true : false;
 }
 
-void turn_on_onboard_led(int led)
+void turn_on_onboard_led(ONBOARD_LED led)
 {
     switch(led) {
     case ONBOARD_LED_RED:
@@ -80,7 +103,7 @@ void turn_on_onboard_led(int led)
     }
 }
 
-void turn_off_onboard_led(int led)
+void turn_off_onboard_led(ONBOARD_LED led)
 {
     switch(led) {
     case ONBOARD_LED_RED:
@@ -99,6 +122,19 @@ void turn_off_onboard_led(int led)
         break;
     }
 }
+
+void turn_on_onboard_led_and_delay(ONBOARD_LED led, uint32_t delay)
+{
+    turn_on_onboard_led(led);
+    systick_delay(delay);
+}
+
+void turn_off_onboard_led_and_delay(ONBOARD_LED led, uint32_t delay)
+{
+    turn_off_onboard_led(led);
+    systick_delay(delay);
+}
+
 
 //*****************************************************************************
 //
@@ -122,6 +158,30 @@ void enable_interrupt(void)
     asm(" cpsie i\n");
 }
 
+void init_systick(void)
+{
+    NVIC_ST_CTRL_R  = (1U << 2) | (1U << 1) | 1U;
+    NVIC_ST_RELOAD_R = SYS_CLOCK_HZ/1000 - 1;   // roughly 1ms
+    NVIC_ST_CURRENT_R = 0;
+}
+
+static uint32_t get_tick_ctl(void)
+{
+    uint32_t tick_ctl;
+    __asm("    cpsid    i\n"); // disable irq
+    tick_ctl = g_tick_ctl;
+    __asm("    cpsie    i\n"); // enable irq
+    return tick_ctl;
+}
+
+void systick_delay(uint32_t ms)
+{
+    uint32_t start = get_tick_ctl();
+    while(((get_tick_ctl() - start) < ms) && !g_immediate_stop)
+        ;
+}
+
+
 void init_gpio_portf_interrupt(void)
 {
     GPIO_PORTF_IS_R &= ~(ONBOARD_SW1 | ONBOARD_SW2);
@@ -135,22 +195,12 @@ void init_gpio_portf_interrupt(void)
     enable_interrupt();
 }
 
-
 //*****************************************************************************
-//
-// GPIO PORTF Interrupt Handler
-//
-//*****************************************************************************
-void gpio_portf_handler(void)
+// systick_handler stays inside gpiodriver.c since there is no need
+// to be changed by the user.
+// All other interrupt handlers will be int_handers.c
+void systick_handler(void)
 {
-    if (GPIO_PORTF_RIS_R & ONBOARD_SW1) {
-        turn_off_onboard_led(ONBOARD_LED_ALL);
-        turn_on_onboard_led(ONBOARD_LED_RED);
-    }
-    else if (GPIO_PORTF_RIS_R & ONBOARD_SW2) {
-        turn_off_onboard_led(ONBOARD_LED_ALL);
-        turn_on_onboard_led(ONBOARD_LED_BLUE);
-    }
-    GPIO_PORTF_ICR_R = (ONBOARD_SW1 | ONBOARD_SW2); // clear flag PF1 and PF4
+    g_tick_ctl++;
 }
 
